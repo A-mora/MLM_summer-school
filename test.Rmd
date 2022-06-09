@@ -1,0 +1,79 @@
+---
+title: "Multilevel Model for Binary response"
+output:
+  xaringan::moon_reader:
+    css: xaringan-themer.css
+    nature:
+      countIncrementalSlides: false
+      highlightStyle: github
+      highlightLines: true
+---
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_mono_light(
+  base_color = "#3f5264", 
+  code_highlight_color = "#c0e8f5",
+  link_color = "#197b9e",
+  header_font_google = google_font("Josefin Sans"),
+  text_font_google   = google_font("Montserrat", "300", "300i"),
+  code_font_google   = google_font("Droid Mono")
+)
+```
+---
+
+class: center
+# Introduce the session!
+ Outline
+---
+class: center
+# Getting started
+All the details...
+
+---
+# When to use Multilevel models for binary response
+
+.pull-left[
+
+### Recidivism Study in Chile
+
+**Data**: criminal history data of a cohort of individuals released from prison 
+
+**Outcome**: Whether a *persons* got a new conviction or not
+
+**Levels**: *Individual* (level 1) nested within *prisons* (level 2)
+
+]
+
+.pull-right[
+
+### Controlled Delivery of Drug Parcels in scotland
+
+**Data**: Drug parcels seized by the UKBF en route to Scotland
+
+**Outcome**: Whether a *parcel* was adopted for a controlled delivery or not
+
+**Levels**: *drug parcels* (level 1) nested within *Local Authorities* (level 2)
+
+]
+
+---
+
+#.center[Multilevel models for binary response]
+
+Just as in the well-known single level models, we use logistic regression in multilevel modeling when outcome variable is binary (Yes/No)
+
+--
+
+## Examples
+
+- Whether someone reoffend or not
+
+--
+- Whether someone was victim of a crime in the last 12 months or not
+
+--
+- Whether someone had been depressed
+
+
+--- 
