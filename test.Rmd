@@ -10,7 +10,7 @@ output:
     chakra: libs/remark-latest.min.js
     nature:
       countIncrementalSlides: false
-      highlightStyle: github
+      highlightStyle: solarized-light
       highlightLines: true
 ---
 
@@ -27,8 +27,8 @@ style_mono_light(
 ```
 
 
-```{r setup, echo = FALSE, message = FALSE, warning = FALSE}
-knitr::opts_chunk$set(echo = FALSE, eval = FALSE, message = FALSE, dpi = 72)
+```{r setup, echo = FALSE,  message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, dpi = 72)
 #library(icon)      ## for FontAwesome icons (ozunconf17 project!)
 #library(emo)       ## for emoji, obvs (github.com/hadley/emo)
 library(tidyverse) ## for data wrangling
@@ -238,19 +238,112 @@ Measures the proportion of the total variance that is due to differences between
 
 --
 
-There a several ways of defining VPC for binary data
+There a several ways of defining VPC for binary data:
+- Model linearization
+- Simulation
+- .bold[<font color="#314152">Latent Variable approach</font>]
+
+
+for more details [click here](https://rss.onlinelibrary.wiley.com/doi/epdf/10.1111/j.1467-985X.2004.00365.x?saml_referrer)
+
+.center[<img src="images/VPC article.png", width="50%"/>]
+
+
+---
+class: middle
+###VPC  Latent Variable Approach
+Recall VPC formula for continuous response:
+$$VPC = \frac{\sigma_u^2}{\sigma_u^2 + \sigma_e^2}$$
+
+Assume that the underlying response variable is *continuous* but we can only observe a **binary response** indicating whether the underlying variable is greater or less than a given threshold.
+
+This underlying continuous variable come from a logistic distribution with a variance of $\frac{\pi^2}{3} \approx 3.29$
+
+Replacing on the previus formula:
+
+$$VPC = \frac{\sigma_u^2}{\sigma_u^2 + \sigma_e^2*}$$  
+where $\sigma_e^2*= \frac{\pi^2}{3}$
+
+
+---
+## Example
+
+
+
+
+```{r eval=TRUE}
+mydata <- read.table("data/antenatal.txt",  
+                     header = TRUE, sep = ",")
+
+fit <- glmer(antemed ~(1 | comm),  
+             family = binomial("logit"), 
+             data = mydata)
+
+```
+---
+class: middle
+
+###R output
+````
+fit <- glmer(antemed ~    # Outcome variable
+             (1 | comm),  # level two specification
+             family = binomial("logit"), #link  function
+             data = mydata)
+
+````
+Fixed part
+
+````
+Fixed effects:
+            Estimate Std. Error z value Pr(>|z|)  
+(Intercept)  0.14809    0.07178   2.063   0.0391 * 
+---
+Signif. codes:  
+0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+````
+**Interpretation**
+
+The log-odds of receiving antenatal care in an ‘average’ community $(u_j=0)$ is estimated as $\beta_0=0.148$.
 
 ---
 class: middle
 
-## Examples
+### R Output (2)
 
---
+Random part
+````
+Random effects:
+ Groups Name        Variance Std.Dev.
+ comm   (Intercept) 1.464    1.21    
+Number of obs: 5366, groups:  comm, 361
+````
+**Interpretation**
 
-
+The intercept for community $j$ is $0.148+u_j$, where the variance of $u_j$ is estimated as $\sigma^2_u=1.464$
 
 ---
+### Adding an explanatory variable
+```{r eval=TRUE}
+mydata <- read.table("data/antenatal.txt",  
+                     header = TRUE, sep = ",")
 
+fit2 <- glmer(antemed ~ magec + (1 | comm), family = binomial("logit"), data = mydata)
+```
+ We add maternal age
+ 
+````
+Fixed effects:
+             Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  0.144604   0.071781   2.015    0.044 *  
+magec       -0.032357   0.005235  -6.181 6.37e-10 ***
+---
+Signif. codes:  
+0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+````
+
+$\log\left(\frac{p_{ij}}{1-p_{ij}}\right)=\beta_0+\beta_1x_{i} =  0.144 -0.032[maternalAge]$
+
+---
 class: center, middle, inverse
 
 ## TODAY'S GOAL
