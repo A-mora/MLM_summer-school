@@ -38,13 +38,14 @@ library(lme4)
 
 ```
 
-class: center
-# Introduce the session!
- Outline
----
-class: center
-# Getting started
-All the details...
+class: center, middle, inverse
+
+## TODAY'S GOAL
+
+
+
+
+
 
 ---
 ## When to use Multilevel models for binary response?
@@ -346,7 +347,7 @@ $\log\left(\frac{p_{ij}}{1-p_{ij}}\right)=\beta_0+\beta_1x_{i} =  0.144 -0.032[m
 ---
 class: center, middle, inverse
 
-## TODAY'S GOAL
+## Practical 3
 
 --
 
